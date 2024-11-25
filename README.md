@@ -11,13 +11,16 @@ To build a robust, automated drowning detection system using video analysis and 
 
 The system uses the YOLOv5 pre-trained model to detect and track individuals in the video feed.
 Bounding boxes are drawn around detected objects, and only "person" detections with a confidence score > 0.25 are processed further.
+
 2.Pose Estimation
 
 Mediapipe's Pose module extracts key points (shoulder, elbow, and wrist) from detected persons.
 The system calculates angles at the elbows to identify a "raised hand" gesture, which can indicate a distress signal.
+
 3.Behavior Analysis
 
 Distress behavior is identified if a person's hand remains raised above their shoulder for more than a defined number of frames (7 frames by default).
+
 4.Alert Mechanism
 
 When a potential drowning incident is detected, an audible alarm is triggered using the miniaudio library to alert nearby rescuers.

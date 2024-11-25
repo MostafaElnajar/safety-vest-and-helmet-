@@ -1,55 +1,59 @@
-# Save People from Drowning
+# Safety Vest and Helmet Detection
 
-This project is a real-time drowning detection system leveraging computer vision, pose estimation, and deep learning techniques to monitor and identify potential drowning incidents in video feeds. The system raises an alert if a person shows distress signs, such as raising hands for help, ensuring timely intervention to save lives.
+This project is an AI-based system for detecting workers wearing safety helmets and vests in a video feed. It identifies workers without proper safety gear, labels them appropriately, and saves images of violations for further review. The tool aims to ensure compliance with workplace safety standards in construction, manufacturing, and other industries.
 
 ### Objective
 
-To build a robust, automated drowning detection system using video analysis and AI models to enhance water safety and reduce response time during emergencies.
+To develop a real-time monitoring system that ensures worker safety by detecting safety helmets and vests using computer vision and a custom-trained YOLOv5 model.
 
 ### How It Works
 1.Object Detection
 
-The system uses the YOLOv5 pre-trained model to detect and track individuals in the video feed.
-Bounding boxes are drawn around detected objects, and only "person" detections with a confidence score > 0.25 are processed further.
+The system uses a custom YOLOv5 model trained to detect helmets, vests, and workers in video footage.
+Bounding boxes are drawn around detected objects, and labels are applied for identification (Helmet, Vest, Worker).
 
-2.Pose Estimation
+2.Safety Compliance Check
 
-Mediapipe's Pose module extracts key points (shoulder, elbow, and wrist) from detected persons.
-The system calculates angles at the elbows to identify a "raised hand" gesture, which can indicate a distress signal.
+Each worker's bounding box is compared against detected helmets and vests.
+If a worker lacks a helmet, a vest, or both, they are flagged as non-compliant.
 
-3.Behavior Analysis
+3.Violation Handling
 
-Distress behavior is identified if a person's hand remains raised above their shoulder for more than a defined number of frames (7 frames by default).
+Images of non-compliant workers are saved with details in the output/ directory for record-keeping.
+The type of violation (e.g., "No Helmet," "No Vest," "No Helmet and Vest") is displayed on the video frame.
 
-4.Alert Mechanism
+4.Output Generation
 
-When a potential drowning incident is detected, an audible alarm is triggered using the miniaudio library to alert nearby rescuers.
+A processed video with all detections, labels, and violations is saved as output.mp4.
+
 ### Technical Details
-### Tools and Libraries
-YOLOv5: Pre-trained model for object detection, loaded via PyTorch.
-Mediapipe: For pose estimation and keypoint extraction.
-OpenCV: For video processing and frame manipulation.
-miniaudio: For playing alert sound when a distress signal is detected.
-NumPy: For mathematical operations like angle calculation.
-Mutagen: To get metadata of audio files for precise alert timing.
 ### Workflow
-1.Object Detection:
+1. Model Loading
 
-YOLOv5 detects individuals in each frame of the video feed and filters out non-human objects.
+The YOLOv5 model (best final.pt) is loaded using PyTorch’s hub functionality.
+The custom model is trained specifically to detect three classes: Helmet, Vest, and Worker.
 
-2.Pose Detection and Angle Calculation:
+2. Video Processing
 
-Mediapipe extracts landmarks (shoulder, elbow, and wrist) for each detected person.
-Angles are calculated using the arctangent formula to analyze arm movements.
+Input video frames are resized for consistent processing.
+The model outputs predictions for each frame, including bounding boxes, confidence scores, and class IDs.
 
-3.Drowning Signal Identification:
+3. Safety Violation Detection
 
-The system checks if the wrist is above the elbow and shoulder, and if the calculated angle exceeds 150 degrees.
-If this posture persists across consecutive frames, it flags the behavior as a distress signal.
+For each detected worker:
+Overlapping checks determine if a helmet or vest is within the worker's bounding box.
+If no overlap is detected, the worker is flagged as non-compliant.
+Images of non-compliant workers are cropped and saved with descriptive filenames.
 
-4.Alert Sound:
+4. Output Video and Visualization
 
-An MP3 alarm sound is played via miniaudio for a duration equal to the audio file's length to ensure proper alerting.
-### Key Functions
-calc_angle: Calculates the angle between the shoulder, elbow, and wrist to analyze arm posture.
-Tracker Class: Tracks multiple individuals across frames to identify consistent distress behaviors
+Bounding boxes and labels are added to frames for helmets, vests, and workers.
+Violations are highlighted in red with appropriate text annotations.
+The processed video is saved in MP4 format with all detections and annotations.
+
+### Tools and Technologies
+YOLOv5: For custom object detection (trained model).
+OpenCV: For video processing, frame handling, and visualization.
+PyTorch: For model loading and inference.
+NumPy: For numerical operations and bounding box calculations.
+Custom Dataset: Trained on images of workers, helmets, and vests.

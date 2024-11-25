@@ -33,14 +33,17 @@ Mutagen: To get metadata of audio files for precise alert timing.
 1.Object Detection:
 
 YOLOv5 detects individuals in each frame of the video feed and filters out non-human objects.
+
 2.Pose Detection and Angle Calculation:
 
 Mediapipe extracts landmarks (shoulder, elbow, and wrist) for each detected person.
 Angles are calculated using the arctangent formula to analyze arm movements.
+
 3.Drowning Signal Identification:
 
 The system checks if the wrist is above the elbow and shoulder, and if the calculated angle exceeds 150 degrees.
 If this posture persists across consecutive frames, it flags the behavior as a distress signal.
+
 4.Alert Sound:
 
 An MP3 alarm sound is played via miniaudio for a duration equal to the audio file's length to ensure proper alerting.

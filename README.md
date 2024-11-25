@@ -2,7 +2,7 @@
 
 This project is a real-time drowning detection system leveraging computer vision, pose estimation, and deep learning techniques to monitor and identify potential drowning incidents in video feeds. The system raises an alert if a person shows distress signs, such as raising hands for help, ensuring timely intervention to save lives.
 
-###Objective
+##Objective
 
 To build a robust, automated drowning detection system using video analysis and AI models to enhance water safety and reduce response time during emergencies.
 
